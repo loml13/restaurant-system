@@ -1,9 +1,0 @@
-D:/Dev_code/restaurant-system/cmake-build-debug/CMakeFiles/restaurant_lib.dir
-D:/Dev_code/restaurant-system/cmake-build-debug/CMakeFiles/restaurant_system.dir
-D:/Dev_code/restaurant-system/cmake-build-debug/CMakeFiles/admin.dir
-D:/Dev_code/restaurant-system/cmake-build-debug/CMakeFiles/menu.dir
-D:/Dev_code/restaurant-system/cmake-build-debug/CMakeFiles/order.dir
-D:/Dev_code/restaurant-system/cmake-build-debug/CMakeFiles/user.dir
-D:/Dev_code/restaurant-system/cmake-build-debug/CMakeFiles/cashier.dir
-D:/Dev_code/restaurant-system/cmake-build-debug/CMakeFiles/edit_cache.dir
-D:/Dev_code/restaurant-system/cmake-build-debug/CMakeFiles/rebuild_cache.dir
