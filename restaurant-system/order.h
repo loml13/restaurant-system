@@ -36,8 +36,11 @@ typedef struct {
 // 函数原型
 int load_orders(const char* filename, Order orders[], int max_orders);
 int save_order(const char* filename, Order* order );
-int add_order(Order orders[], int* order_count, Order order);
-int update_order_status( const char* filename, Order orders[], int order_count, int order_id, int dish_id);
+int update_dish_status( const char* filename, Order orders[], int order_count, int order_id, int dish_id);
 int updated_paid(const char* filename, Order order[], int order_count, int order_id  );
+int delete_order_line(const char* filename, int order_id_to_delete);
+double find_price(MenuItem menu[], int menu_count, int dish_id);
+void customer_order(MenuItem menu[], int menu_count, const char* order_file);
+int get_next_order_id(const char* filename);
 
 #endif // ORDER_H
