@@ -1,11 +1,8 @@
 #include "admin.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-void admin_menu() {
-    // 管理员菜单的占位符
-    printf("管理员菜单尚未实现。\n");
-}
 
 const char* status_name(OrderStatus status)
 {
@@ -23,8 +20,8 @@ const char* status_name(OrderStatus status)
 void view_all_users(User users[], int count) {
     printf("用户列表:\n");
     for(int i = 0; i < count; i++) {
-        printf("ID: %d, 用户名: %s, 角色: %d\n",
-            users[i].id, users[i].username, users[i].role);
+        printf("ID: %d, 用户名: %s \n, 密码: %s \n" ,
+            users[i].id, users[i].username, users[i].password);
     }
 }
 
@@ -35,7 +32,7 @@ void view_all_menu(MenuItem menu[], int count) {
             menu[i].id, menu[i].name,
             menu[i].type == DISH ? "菜品" : "酒水",
             menu[i].price,
-            menu[i].status == DONE ? "已售罄" : "在售中");
+            menu[i].status == NONE ? "已售罄" : "在售中");
         printf("\n");
     }
 }
@@ -43,13 +40,13 @@ void view_all_menu(MenuItem menu[], int count) {
 void view_all_orders(Order orders[], int count) {
     printf("订单列表:\n");
     for(int i = 0; i < count; i++) {
-        printf("订单ID: %d 餐桌: %d 消费者ID: %d 总金额: ￥%.2lf, 菜品数量: %d\n , 餐品状态: %s\n",
+        printf("订单ID: %d 餐桌: %d 消费者ID: %d 总金额: ￥%.2lf, 菜品数量: %d\n , 订单状态: %s\n",
             orders[i].order_id, orders[i].table_number,
             orders[i].consumer_id, orders[i].total, orders[i].dish_count,status_name(orders[i].status));
 
             for (int j = 0 ; j < orders[j].dish_count; j++)
             {
-                printf("餐品ID: %d 餐品状态: %d\n", orders[i].dishes[j].dish_id, orders[i].dishes[j].status);
+                printf("餐品ID: %d 餐品状态: %s\n", orders[i].dishes[j].dish_id, orders[i].dishes[j].status == DONE ? "已出餐" : "正在制作");
             }
     }
 
@@ -67,11 +64,18 @@ int change_dish_status(const char* filename, MenuItem menu[], int count, int id)
             dish_result = 1;
             if (updated_dish[i].status == HAVE)
             {
-                printf("目前餐品状态为在售");
+                printf("目前餐品状态为在售 \n");
             }
-            else
+            else if (updated_dish[i].status != HAVE)
             {
-                updated_dish[i].status = HAVE;
+                int a = 0;
+                printf("是否修改菜品状态为在售？ 确认请按1 : ");
+                scanf("%d",&a );
+                if (a == 1)
+                {
+                    printf("餐品状态已为在售 \n");
+                    updated_dish[i].status = HAVE;
+                }
             }
         }
     }
@@ -100,6 +104,7 @@ int change_dish_status(const char* filename, MenuItem menu[], int count, int id)
 
     // 关闭文件
     fclose(file);
+    system("pause");
 
     return 0;  // 保存成功
 }
