@@ -14,6 +14,7 @@ User users[MAX_USERS];
 MenuItem menu[MAX_MENU];
 Order orders[MAX_ORDERS];
 
+
 int main() {
 
     printf("顾客用户名:consumer || 密码:cons123 \n");
@@ -48,14 +49,19 @@ int main() {
     switch(current_user.role) {
     case ADMIN:
         int choice;
-        printf("1.查询系统用户 \n"
+
+        while(1)
+        {
+            printf("1.查询系统用户 \n"
                "2.查询所有菜单 \n"
                "3.查询所有订单 \n"
                "4.修改餐品售卖状态 \n"
+               "5.删除订单内容 \n"
+               "6.退出系统 \n"
                "输入选项: ");
-        scanf("%d", &choice);
-        switch(choice)
-        {
+            scanf("%d", &choice);
+            switch(choice)
+            {
             case 1:
                 view_all_users(users, user_count);
                 break;
@@ -74,8 +80,24 @@ int main() {
                 scanf("%d", &dish_id);
 
                 change_dish_status("data/menu", menu, menu_count, dish_id );
-            break;
+                break;
+
+                case 5:
+                    int order_id_to_delete;
+                    printf("请输入想删除的订单ID");
+                    scanf("%d", &order_id_to_delete);
+
+                    delete_order_line("data/orders", order_id_to_delete);
+                    break;
+            case 6:
+                return 0;
+
+            default:
+                printf("输入错误");
+
+            }
         }
+
     break;
 
     case CASHIER:
@@ -110,6 +132,7 @@ int main() {
         {
             printf("1.查看所有订单 \n"
                      "2.更改菜品状态 \n"
+                     "3.退出系统 \n"
                      "请输入选项: ");
             scanf("%d" , &choice);
 
@@ -121,28 +144,27 @@ int main() {
                     break;
 
                 case 2:
-                    int orderid , dishid;
-
+                    int order_id , dish_id;
 
                 printf("请输入想要修改的订单ID和菜品ID: ");
-                if (scanf("%d %d", &orderid, &dishid) != 2) {
+                if (scanf("%d %d", &order_id, &dish_id) != 2) {
                     printf("输入无效，请输入数字。\n");
                     while (getchar() != '\n'); // 清除输入缓冲区
                     continue;
                 }
-                if (orderid < 0 || orderid >= order_count) {
+                if (order_id < 0 || order_id > order_count) {
                     printf("订单ID无效。\n");
                     continue;
                 }
 
-                update_order_status("data/orders",orders, order_count, orderid, dishid);
+                update_dish_status("data/orders",orders, order_count, order_id, dish_id);
                     break;
                 case 3:
                     return 0;
 
                 default:
 
-        break;       printf("输入错误 \n");
+        break;
             }
         }
     case WAITER:
@@ -150,68 +172,66 @@ int main() {
         break;
     case BOSS:
 
-        printf("1.查询系统用户 \n"
+        while (1)
+        {
+            printf("1.查询系统用户 \n"
                "2.查询所有菜单 \n"
                "3.查询所有订单 \n"
                "4.修改餐品售卖状态 \n"
+               "5.添加新菜品 \n"
+               "6.删除订单内容 \n"
+               "7.退出系统 \n"
                "输入选项: ");
-        scanf("%d", &choice);
-        switch(choice)
-        {
-        case 1:
-            view_all_users(users, user_count);
-            break;
+            scanf("%d", &choice);
 
-        case 2:
-            view_all_menu(menu, menu_count);
-            break;
+            switch(choice)
+            {
+            case 1:
+                view_all_users(users, user_count);
+                break;
 
-        case 3:
-            view_all_orders(orders, order_count);
-            break;
+            case 2:
+                view_all_menu(menu, menu_count);
+                break;
 
-        case 4:
-            int dish_id;
-            printf("请输入想修改的菜品ID");
-            scanf("%d", &dish_id);
+            case 3:
+                view_all_orders(orders, order_count);
+                break;
 
-            change_dish_status("data/menu", menu, menu_count, dish_id );
-            break;
+            case 4:
+                int dish_id;
+                printf("请输入想修改的菜品ID");
+                scanf("%d", &dish_id);
+
+                change_dish_status("data/menu", menu, menu_count, dish_id );
+                break;
+
+            case 5:
+                add_menu("data/menu");
+                break;
+
+            case 6:
+                int order_id_to_delete;
+                printf("请输入想删除的订单ID");
+                scanf("%d", &order_id_to_delete);
+
+                delete_order_line("data/orders", order_id_to_delete);
+                break;
+
+            case 7:
+                return 0;
+
+            default:printf("下班");
+
+            }
+
         }
-        break;
+
     case CONSUMER:
-        Order new_order;
+        Order order;
 
-        printf("请输入您的餐桌号:");
-        scanf("%d", &new_order.table_number);
-        printf("请输入您的等位号:");
-        scanf("%d", &new_order.consumer_id);
+        customer_order(menu,  menu_count, "data/orders");
 
-        view_all_menu(menu, menu_count);
-        printf("请输入您期望餐品数量:");
-        scanf("%d" , &new_order.dish_count);
-
-        new_order.total = 0;
-
-        printf("请输入餐品信息 \n");
-
-        for (int i = 0; i < new_order.dish_count; i++) {
-            printf("输入餐品对应ID %d: ", i + 1);
-            scanf("%d", &new_order.dishes[i].dish_id);
-
-            new_order.dishes[i].status = PENDING;
-
-             // 假设每道菜的价格为10.0，实际情况根据需求修改
-            new_order.total += 10.0;  // 增加菜品价格到总金额
-        }
-
-        // 新订单ID
-        new_order.order_id = order_count + 1;
-
-        // 添加订单并保存到文件
-        add_order(orders, &order_count, new_order);
-
-        printf("订单创建成功，请耐心等待上菜！\n");
         break;
     default:
         printf("恭喜触发隐藏剧情，请前往后厨刷一百个盘子。\n");
