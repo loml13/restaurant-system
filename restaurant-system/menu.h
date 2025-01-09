@@ -23,6 +23,6 @@ typedef struct {
 
 // 函数原型
 int load_menu(const char* filename, MenuItem menu[], int max_items);
-
+int add_menu(const char* filename);
 
 #endif // MENU_H
