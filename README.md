@@ -18,7 +18,7 @@
 
 ## 二、餐厅点餐结算系统的使用说明
 
-1、 配置CMakeLists.txt文件，将其中的数据库连接信息修改为自己的数据库连接信息。
+1、 配置CMakeLists.txt文件，推荐使用3.29版本cmake。
 
 2、 使用CLion打开项目，配置好CMakeLists.txt文件后，编译运行项目
 
